@@ -1,25 +1,25 @@
 debug = true
 
--- Timers
--- We declare these here so we don't have to edit them multiple places
 canShoot = true
 canShootTimerMax = 0.2 
 canShootTimer = canShootTimerMax
+
+bulletImg = nil
+bullets = {}
+
+
+--More timers
 createEnemyTimerMax = 0.4
 createEnemyTimer = createEnemyTimerMax
+  
+-- More images
+enemyImg = nil -- Like other images we'll pull this in during out love.load function
+  
+-- More storage
+enemies = {}
 
--- Player Object
-player = { x = 200, y = 710, speed = 150, img = nil }
 isAlive = true
-score  = 0
-
--- Image Storage
-bulletImg = nil
-enemyImg = nil
-
--- Entity Storage
-bullets = {} -- array of current bullets being drawn and updated
-enemies = {} -- array of current enemies on screen
+score = 0
 
 function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
   return x1 < x2+w2 and
@@ -29,10 +29,12 @@ function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
 end
 
 function love.load()
-	player = { x = 300, y = 410, speed = 350, img = nil }
-	player.img = love.graphics.newImage("assets/airplane.png")
+	love.window.setFullscreen(true, "desktop")
+
+	player = { x = 300, y = 710, speed = 450, img = nil }
+	player.img = love.graphics.newImage("assets/plane.png")
 	bulletImg = love.graphics.newImage('assets/bullet.png')
-	enemyImg = love.graphics.newImage('assets/airplane.png')
+	enemyImg = love.graphics.newImage('assets/plane.png')
 end
 
 function love.update(dt)
@@ -130,20 +132,27 @@ function love.update(dt)
 end
 
 function love.draw(dt)
-	love.graphics.setBackgroundColor(255,255,255)
-	love.graphics.draw(player.img, player.x, player.y)
 	for i, bullet in ipairs(bullets) do
 		love.graphics.draw(bullet.img, bullet.x, bullet.y)
 	end
 
 	for i, enemy in ipairs(enemies) do
-	love.graphics.draw(enemy.img, enemy.x, enemy.y)
+		love.graphics.draw(enemy.img, enemy.x, enemy.y)
 	end
+
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.print("SCORE: " .. tostring(score), 400, 10)
 
 	if isAlive then
 		love.graphics.draw(player.img, player.x, player.y)
 	else
 		love.graphics.print("Press 'R' to restart", love.graphics:getWidth()/2-50, love.graphics:getHeight()/2-10)
 	end
+
+	if debug then
+		fps = tostring(love.timer.getFPS())
+		love.graphics.print("Current FPS: "..fps, 9, 10)
+	end
+
 end
 
