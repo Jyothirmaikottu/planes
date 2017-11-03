@@ -1,3 +1,6 @@
+--&cmp Vihar Kurama
+--Release 1.0
+
 debug = true
 
 canShoot = true
@@ -153,6 +156,5 @@ function love.draw(dt)
 		fps = tostring(love.timer.getFPS())
 		love.graphics.print("Current FPS: "..fps, 9, 10)
 	end
-
 end
 
